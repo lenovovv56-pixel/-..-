@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مولّد الحسابات التجريبية</title>
+<style>
+:root{--bg:#f3f6fb;--card:#fff;--ink:#172033;--muted:#68758b;--line:#e4e9f1;--primary:#2563eb;--primary2:#1d4ed8;--green:#15803d;--red:#b91c1c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif}
+header{background:linear-gradient(130deg,#10264d,#1d4ed8);color:white;padding:34px 18px;text-align:center}
+header h1{margin:0 0 9px;font-size:clamp(24px,4vw,36px)}header p{margin:0;color:#dbeafe}
+main{max-width:1180px;margin:24px auto;padding:0 16px 40px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:18px;box-shadow:0 8px 24px #1720330a}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+label{display:block;font-weight:bold;margin-bottom:8px}
+input,select{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:10px;font:inherit;background:#fff;color:var(--ink)}
+.checks{display:flex;flex-wrap:wrap;gap:14px}.checks label{display:flex;align-items:center;gap:7px;font-weight:normal;margin:0}.checks input{width:auto}
+button{border:0;border-radius:10px;padding:11px 16px;font:inherit;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}.primary{background:var(--primary);color:white}.primary:hover{background:var(--primary2)}
+.secondary{background:#eaf0ff;color:#1d4ed8}.danger{background:#fee2e2;color:var(--red)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.note{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;padding:12px 14px;border-radius:12px;line-height:1.7}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:16px}
+.stat{background:#f8fafc;border:1px solid var(--line);padding:14px;border-radius:12px}.stat small{display:block;color:var(--muted);margin-bottom:6px}.stat strong{font-size:22px}
+.table-wrap{overflow:auto;max-height:540px;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;min-width:720px}th,td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{position:sticky;top:0;background:#f8fafc;z-index:1}tbody tr:hover{background:#f8fbff}
+.muted{color:var(--muted);font-size:13px}.status{margin-top:12px;font-weight:bold;color:var(--green);min-height:22px}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:10px}
+@media(max-width:600px){.card{padding:15px}header{padding:26px 14px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>🤖 مولّد الحسابات التجريبية</h1>
+  <p>إنشاء بيانات اصطناعية للاختبار والتطوير — دون تسجيل في أي خدمة خارجية</p>
+</header>
+<main>
+  <section class="card">
+    <div class="note"><strong>تنبيه مهم:</strong> عناوين البريد التي ينشئها هذا الموقع تستخدم نطاقات محجوزة للاختبار مثل <b>example.com</b> و<b>example.net</b> و<b>example.org</b>. هي ليست صناديق بريد حقيقية ولا تستقبل رسائل. كلمات المرور تجريبية وليست مخصصة لحسابات حقيقية.</div>
+  </section>
+
+  <section class="card">
+    <h2>إعدادات التوليد</h2>
+    <div class="grid">
+      <div>
+        <label for="count">عدد السجلات (1 إلى 100,000)</label>
+        <input id="count" type="number" min="1" max="100000" value="1000">
+      </div>
+      <div>
+        <label for="language">لغة البيانات</label>
+        <select id="language"><option value="mixed" selected>مختلطة (عربية وإنجليزية)</option><option value="ar">عربية</option><option value="en">إنجليزية</option></select>
+      </div>
+      <div>
+        <label for="prefix">بادئة اختيارية للمعرّف</label>
+        <input id="prefix" type="text" maxlength="12" placeholder="مثال: TEST" value="TEST">
+      </div>
+    </div>
+    <div style="margin-top:18px">
+      <label>الحقول المطلوب إنشاؤها</label>
+      <div class="checks">
+        <label><input type="checkbox" checked disabled> البريد التجريبي</label>
+        <label><input type="checkbox" checked disabled> الاسم</label>
+        <label><input type="checkbox" checked disabled> كلمة مرور تجريبية</label>
+        <label><input type="checkbox" checked disabled> المعرّف الفريد</label>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="primary" id="generate">إنشاء 1000 سجل تجريبي</button>
+      <button class="secondary" id="clear">مسح النتائج</button>
+    </div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+  </section>
+
+  <section class="card">
+    <h2>ملخص النتائج</h2>
+    <div class="stats">
+      <div class="stat"><small>عدد السجلات الحالية</small><strong id="total">0</strong></div>
+      <div class="stat"><small>عدد المعرّفات الفريدة</small><strong id="unique">0</strong></div>
+      <div class="stat"><small>نوع البيانات</small><strong style="font-size:17px">تجريبية</strong></div>
+    </div>
+    <div class="actions">
+      <button class="secondary" id="csv" disabled>تنزيل CSV</button>
+      <button class="secondary" id="json" disabled>تنزيل JSON</button>
+      <button class="secondary" id="copy" disabled>نسخ أول 20 سجلاً</button>
+    </div>
+    <p class="muted">يمكن فتح ملف CSV باستخدام Excel أو أي برنامج جداول بيانات.</p>
+  </section>
+
+  <section class="card">
+    <h2>معاينة السجلات</h2>
+    <p class="muted">تعرض المعاينة أول 100 سجل فقط لتسهيل التصفح. عند التصدير سيتم تنزيل جميع السجلات.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>المعرّف</th><th>الاسم</th><th>البريد التجريبي</th><th>كلمة المرور التجريبية</th></tr></thead>
+        <tbody id="rows"><tr><td colspan="5" class="muted">لم يتم إنشاء سجلات بعد.</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+  <footer>يتم إنشاء البيانات داخل متصفحك فقط، ولا تُرسل إلى خادم أو جهة خارجية.</footer>
+</main>
+<script>
+(() => {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  let records = [];
+  const firstAr = ["أحمد","محمد","علي","عمر","خالد","سامي","نور","ليان","سارة","مريم","رامي","ياسر","هبة","لينا","كريم","دانا","فادي","آية","مازن","رنا"];
+  const lastAr = ["الحسن","الخطيب","العلي","الحموي","الدمشقي","النجار","السالم","إبراهيم","منصور","يوسف","عباس","الرفاعي","حسن","مراد","صالح"];
+  const firstEn = ["Alex","Sam","Jordan","Taylor","Morgan","Riley","Casey","Jamie","Avery","Drew","Robin","Cameron","Noah","Mia","Liam","Emma","Owen","Luna","Ethan","Zoe"];
+  const lastEn = ["Miller","Taylor","Wilson","Brown","Davis","Clark","Lewis","Martin","Walker","Hall","Young","Allen","King","Scott","Green"];
+  const domains = ["example.com","example.net","example.org","test.invalid"];
+  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+  const pad = (n, width) => String(n).padStart(width, "0");
+  function makeName(lang) {
+    const useArabic = lang === "ar" || (lang === "mixed" && Math.random() < 0.5);
+    return useArabic ? pick(firstAr) + " " + pick(lastAr) : pick(firstEn) + " " + pick(lastEn);
+  }
+  function safeSlug(name) {
+    return name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+      .replace(/[^a-z0-9]+/g,".").replace(/^\.+|\.+$/g,"") || "sample";
+  }
+  function makeEmail(name, index) {
+    // النطاقات محجوزة للاستخدام التوضيحي؛ لا تمثل صناديق بريد قابلة للاستلام.
+    return safeSlug(name) + "." + pad(index, 6) + "@" + pick(domains);
+  }
+  function makePassword(index) {
+    return "DEMO-" + pad(index, 6) + "-" + Math.random().toString(36).slice(2,7).toUpperCase();
+  }
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+  }
+  function render() {
+    $("total").textContent = records.length.toLocaleString("en-US");
+    $("unique").textContent = new Set(records.map(r => r.id)).size.toLocaleString("en-US");
+    const body = $("rows");
+    if (!records.length) {
+      body.innerHTML = '<tr><td colspan="5" class="muted">لم يتم إنشاء سجلات بعد.</td></tr>';
+    } else {
+      body.innerHTML = records.slice(0,100).map((r,i) =>
+        `<tr><td>${i+1}</td><td>${escapeHtml(r.id)}</td><td>${escapeHtml(r.name)}</td><td>${escapeHtml(r.email)}</td><td>${escapeHtml(r.password)}</td></tr>`
+      ).join("");
+    }
+    ["csv","json","copy"].forEach(id => $(id).disabled = records.length === 0);
+  }
+  function download(filename, content, type) {
+    const blob = new Blob(["\uFEFF", content], {type});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+  $("generate").addEventListener("click", () => {
+    const count = Number($("count").value);
+    if (!Number.isInteger(count) || count < 1 || count > 100000) {
+      $("status").textContent = "يرجى إدخال عدد صحيح بين 1 و100,000.";
+      $("status").style.color = "var(--red)";
+      return;
+    }
+    const lang = $("language").value;
+    const prefix = $("prefix").value.trim().replace(/[^a-zA-Z0-9_-]/g,"").toUpperCase() || "TEST";
+    records = Array.from({length:count}, (_,i) => {
+      const name = makeName(lang);
+      const serial = i + 1;
+      return {
+        id: `${prefix}-${pad(serial, 7)}`,
+        name,
+        email: makeEmail(name, serial),
+        password: makePassword(serial)
+      };
+    });
+    render();
+    $("status").style.color = "var(--green)";
+    $("status").textContent = `تم إنشاء ${count.toLocaleString("en-US")} سجل تجريبي بنجاح داخل المتصفح.`;
+    $("generate").textContent = `إعادة إنشاء ${count.toLocaleString("en-US")} سجل`;
+  });
+  $("clear").addEventListener("click", () => {
+    records = []; render(); $("status").textContent = "تم مسح النتائج من الصفحة.";
+    $("status").style.color = "var(--green)";
+    $("generate").textContent = "إنشاء السجلات التجريبية";
+  });
+  $("csv").addEventListener("click", () => {
+    const header = ["id","name","email","password"];
+    const quote = v => '"' + String(v).replace(/"/g,'""') + '"';
+    const csv = [header.join(","), ...records.map(r => header.map(k => quote(r[k])).join(","))].join("\r\n");
+    download("demo-accounts.csv", csv, "text/csv;charset=utf-8");
+  });
+  $("json").addEventListener("click", () => download("demo-accounts.json", JSON.stringify(records,null,2), "application/json"));
+  $("copy").addEventListener("click", async () => {
+    const text = JSON.stringify(records.slice(0,20), null, 2);
+    try {
+      await navigator.clipboard.writeText(text);
+      $("status").textContent = "تم نسخ أول 20 سجلاً بصيغة JSON.";
+      $("status").style.color = "var(--green)";
+    } catch {
+      $("status").textContent = "تعذر النسخ التلقائي. استخدم تنزيل JSON.";
+      $("status").style.color = "var(--red)";
+    }
+  });
+  render();
+})();
+</script>
+</body>
+</html>
